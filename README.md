@@ -1,110 +1,88 @@
-# Cortex: PM Chief-of-Staff Agent
+# Cortex
 
-> My final project for Product School's **Agentic Loops for PMs** certification. A chief-of-staff agent that turns raw inputs (project state, GitHub/Jira activity, roadmap, past updates) into finished PM work, a leadership status update and a proposed backlog for a human to clear, built loop-first, bounded, grown into a fleet, and shipped up the Trust Ladder.
+> A chief-of-staff, an orchestrated swarm of agents that triages a PM task, pulls internal state, and preps story batches
 
-This is a **template repo**. Click **Use this template → Create a new repository**, name it `pm-os-agent` (or your own agent's name), and fill in one folder per module as you go.
+_Bryan Le • Agentic Loops for PMs • Cohort September 2026_
 
----
+Repo: https://github.com/askeladden00/pm-os-agent
 
-## The story this repo tells
-
-Strategy first, structure second. This repo is the **build journey of one agent, Cortex**, laid out as the exact sequence of decisions a PM makes when shipping an AI agent team. **Each folder is one framework from the course**, in the order you actually use it, and each ends in a **validation point** — a deliverable, a validator, or an eval — that proves the step is sound before you build on the next one.
-
-Read it top to bottom as a narrative:
-
-| # | The move (story beat) | Framework | Folder | What this step validates |
-|---|---|---|---|---|
-| 1 | **Draw the line** — decide what the agent owns vs. what stays human, *before* anything runs | The Agent Line | `01-agent-line/` | Every risky action has a clear owner |
-| 2 | **Make it loop** — turn that hand-off into an agent that fires itself and knows when it's "done" | Loop Engineering | `02-loop-design/` | The agent knows when to run and when to stop ★ |
-| 3 | **Grow the team** — split into a fleet only when there's a real reason, and add a validator | Orchestration | `03-orchestration/` | Nothing advances unchecked ★ |
-| 4 | **Feed it context** — give each run the right memory without leaking or drifting | Context Engineering & Memory | `04-memory-context/` | The agent reasons on the right, safe inputs |
-| 5 | **Bound it & prove it** — design for when it goes sideways, and spec it by writing its evals | Bounds, Trust & Evals | `05-bounds-evals/` | It fails safe and is measured |
-| 6 | **Ship & widen trust** — demo it, reflect, and set how far up the Trust Ladder it may climb | Autonomy & the Trust Ladder | `06-autonomy/` | It runs end-to-end and earns autonomy with evidence ★ |
-
-> **Why the numbers?** The folders keep a leading number so they sort in build order on GitHub; the name after it (`-agent-line`, `-loop-design`, …) is the framework. Number = *when*, name = *what*.
+This repo is my final project for the Agentic Loops for PMs Certification, Cortex. Each module’s artifact lives in its own folder; this README is the dashboard and the pitch.
 
 ---
 
-## How each lab runs: paste the module's `LAB.md` into your AI assistant
+## Module artifacts
 
-Every module folder ships a **`LAB.md`** — a runbook written *for your AI assistant*. Instead of reading a
-guide and filling in a form, you **paste the module's `LAB.md` into your coding agent (Claude Code, Cursor,
-Codex) or a chatbot (ChatGPT, Claude, Gemini)** and it walks you through the lab: it asks for your
-decisions one step at a time, writes the deliverable file, runs Cortex where needed, and commits.
+### M1 · The Agent Line
+- **Agent-line map**: [`01-agent-line/agent-line-map.md`](01-agent-line/agent-line-map.md)
 
-| Module | Paste this into your assistant |
-|---|---|
-| M1 | `01-agent-line/LAB.md` |
-| M2 | `02-loop-design/LAB.md` |
-| M3 | `03-orchestration/LAB.md` |
-| M4 | `04-memory-context/LAB.md` |
-| M5 | `05-bounds-evals/LAB.md` |
-| M6 | `06-autonomy/LAB.md` |
+### M2 · Loop Engineering
+- **Loop spec**: [`02-loop-design/loop-spec.md`](02-loop-design/loop-spec.md)
 
-A good opener: *"Open `05-bounds-evals/LAB.md` in this repo and walk me through it one step at a time.
-Stop and ask me at every decision."* If your assistant can't read files (plain ChatGPT), paste the
-`LAB.md` contents directly and it will print each block for you to paste into the deliverable file.
+### M3 · Orchestration &amp; Subagents
+- **Orchestration map**: [`03-orchestration/orchestration-map.md`](03-orchestration/orchestration-map.md)
 
-> The **prompt pack** in [`00-build/PROMPTS.md`](00-build/PROMPTS.md) is the quick-reference / fallback:
-> the individual prompts the `LAB.md` files use, if you'd rather drive step by step yourself.
+### M4 · Context Engineering &amp; Memory
+- **Memory &amp; context plan**: [`04-memory-context/memory-and-context.md`](04-memory-context/memory-and-context.md)
+
+### M5 · Bounds &amp; Evals
+- **Bounds &amp; evals**: [`05-bounds-evals/bounds-and-evals.md`](05-bounds-evals/bounds-and-evals.md)
+
+### M6 · Autonomy &amp; Production
+- **Production &amp; autonomy plan**: [`06-autonomy/production-and-autonomy.md`](06-autonomy/production-and-autonomy.md)
+- **Prototype write-up**: [`06-autonomy/prototype.md`](06-autonomy/prototype.md)
 
 ---
 
-## Deliverables at a glance
+## Ship plan
 
-| # | Deliverable | Module | Status | File |
-|---|---|---|---|---|
-| 1 | **Working agent demo** (real run screenshots; link optional) | Built across labs | ☐ | `06-autonomy/prototype.md` |
-| 2 | **Loop Spec** | M2 | ☐ | `02-loop-design/loop-spec.md` |
-| 3 | **Orchestration Map** | M3 | ☐ | `03-orchestration/orchestration-map.md` |
-| 4 | **Insights: build process** | M6 | ☐ | `06-autonomy/build-insights.md` |
-| 5 | **Bounds, trust & autonomy strategy** | M6 | ☐ | `06-autonomy/production-and-autonomy.md` |
+### Autonomy dial (per segment)
+| Segment | Desired autonomy | Why |
+| Seasoned PM (months of experience with Cortex on their own projects) | Bounded-autonomous | Trusts Cortex's grounding and can sanity-check a draft in seconds |
+| New/junior PM (just inherited a project, unfamiliar with it) | Supervised | Can't yet tell if a draft is quietly wrong (wrong project, stale metric) the way we've watched happen |
+| Exec / stakeholder (requests a rollup on a project that isn't theirs day-to-day) | Supervised | Has the least first-hand context to catch a grounding error themselves |
+| Engineers (checking specs and analytics) | Supervised | Need to interact directly with the underlying data, not just trust the output |
 
-## The agent in one sentence
+### Trust Ladder rung + eval gate
+- **Current rung:** Supervised — Cortex owns the entire loop (pulling data, drafting, critiquing, revising), but every single run ends either escalated or "queued for your review"; it has zero ability to post anything on its own.
+- **Eval gate to reach the next rung (bounded-autonomous):** ≥95% EV-1 (tool-call accuracy) pass rate AND 100% EV-5 (safety/jailbreak) pass rate, measured over the most recent 4 weeks (or last 50 runs) of supervised production use.
+- **Incident record so far (what "clean" means for that window):** 0 instances of a wrong-project citation reaching a human-approved update, 0 jailbreak-induced policy violations, 0 confidential (Orbit/Pulsar) leaks.
 
-_What does your agent do, for whom, and where is the agent line, what does it decide vs. what stays human?_
+### Deployment plan
+- **Runtime:** Serverless (a cloud function triggered by the inbound request) — fits the M2 Hook loop type exactly; no need for an always-on server since Cortex doesn't poll.
+- **Operator / on-call owner:** Reacher. Escalation path: repeated bound trips or a model-down situation (see Reliability) page Reacher directly.
+- **Rollback:** Revert the prompt/version via git, disable a specific tool (pull it from the `TOOLS` registry — done live twice this build, with `get_activity`), or drop a segment's dial back a rung (e.g. bounded-autonomous → supervised).
+- **Monitoring:** Eval pass % (EV-1–6 tracked per run), escalation rate (% of runs ending ESCALATE vs. DONE), cost-to-serve (observed $0.0006–$0.0048/run), trust incidents (wrong-project citations, leaks, jailbreak follow-throughs).
 
-## Build & demo
+### ROI metrics + widen-autonomy rule
+| Metric | Target |
+| **Outcome** — % of weekly updates approved with no major edits needed | Captured at the HITL approval step itself |
+| **Cost-to-serve** — average $/run | Already tracked directly by the `Bounds` class in `agent.py` |
+| **Trust incidents** — # of wrong-project citations, invented metrics, or confidential leaks caught per month | Captured from critic rejection reasons + human review notes |
 
-- **How you built it:** _which coding agent (Claude Code / Cursor / Codex) you directed, start in `00-build/`_
-- **Demo link:** _[optional shareable URL]_
-- **Run screenshots:** _required, collected M2 to M6 in `06-autonomy/prototype.md`_
+| Metric | Target |
+| **Outcome** — % of weekly updates approved with no major edits needed | Captured at the HITL approval step itself |
+| **Cost-to-serve** — average $/run | Already tracked directly by the `Bounds` class in `agent.py` |
+| **Trust incidents** — # of wrong-project citations, invented metrics, or confidential leaks caught per month | Captured from critic rejection reasons + human review notes |
 
-## Where it sits on the Trust Ladder
+### Governance &amp; strategy
+- **Compliance:** CONFIDENTIAL roadmap items (Orbit, Pulsar) can enter Cortex's own context — it needs to reason about them — but must never appear in external/company-wide *output*; that's an output rule, not an input rule. Real PII/payment/legal data should never enter a prompt at all.
+- **Safety:** Post/approve company-wide, commit a GA date, mark a launch gate — stays above the line for every segment regardless of rung (per M1, never moved by the dial). Kill switch: human manually revokes the OpenAI API key (M5).
+- **Reliability:** Existing caps from M5 (iteration 8, revision 2, cost $0.10/run + $0.03/day, queue 10); escalate-on-stuck confirmed via real runs. **Model-down fallback:** retry twice consecutively, then pause for 2 minutes and retry once more, then escalate to Reacher.
+- **Strategy:** Widen the seasoned-PM segment to bounded-autonomous first (per the widen rule above), gated by the Trust Ladder's eval numbers.
 
-_shadow · assisted · supervised · bounded-autonomous · autonomous, which rung today, and what eval evidence would let it climb the next one?_
+- **Compliance:** CONFIDENTIAL roadmap items (Orbit, Pulsar) can enter Cortex's own context — it needs to reason about them — but must never appear in external/company-wide *output*; that's an output rule, not an input rule. Real PII/payment/legal data should never enter a prompt at all.
+- **Safety:** Post/approve company-wide, commit a GA date, mark a launch gate — stays above the line for every segment regardless of rung (per M1, never moved by the dial). Kill switch: human manually revokes the OpenAI API key (M5).
+- **Reliability:** Existing caps from M5 (iteration 8, revision 2, cost $0.10/run + $0.03/day, queue 10); escalate-on-stuck confirmed via real runs. **Model-down fallback:** retry twice consecutively, then pause for 2 minutes and retry once more, then escalate to Reacher.
+- **Strategy:** Widen the seasoned-PM segment to bounded-autonomous first (per the widen rule above), gated by the Trust Ladder's eval numbers.
 
 ---
 
-## How to submit
+## Build insights
 
-- Turn the five deliverable files into your final deck (use the **Final Project Deliverables Builder** that ships with the course, it generates `pitch.html` + a clean `README.md` for you, or a tool like Gamma).
-- Submit your own copy to the learning platform within 7 days of your cohort ending.
+- **Friction point.** The validator (critic) was the toughest part of the build — tuning its checks, revision cap, and watching it reject drafts for subtle reasons (an invented risk-level, a conflated project, a stale metric) across nearly every real run took more iteration than any other piece.
+- **Key learning.** - The agent can be dialed in such a way that it fits different personas (the Autonomy Dial per segment), not just one global trust setting.- The agent can be fine-tuned to meet specific project objectives rather than running on generic defaults.
+- **Aha moment.** Having multiple agents each do one specific task, instead of one main agent trying to do everything, would likely be more robust than the single-drafter-plus-critic design Cortex ended up with.
 
-## Repo structure
+---
 
-```
-pm-os-agent/
-├── README.md                          ← this dashboard
-├── 00-build/                          ← runnable starter: the transparent Cortex agent,
-│   │                                    fixtures, RUNBOOK, PROMPTS, CORTEX-ANATOMY
-│   ├── RUNBOOK.md                     ← open in your coding agent, add a key, run a fixture, screenshot
-│   ├── PROMPTS.md                     ← the prompt pack: what to say to your coding agent
-│   ├── CORTEX-ANATOMY.md              ← the 7 things every submission must show
-│   ├── agent.py · critic.py · tools.py · prompts.py
-│   └── fixtures/                      ← mock PM tasks + project/roadmap/updates/norms data
-├── 01-agent-line/
-│   └── agent-line-map.md              ← M1: what to hand to the agent (above vs below the line)
-├── 02-loop-design/
-│   └── loop-spec.md                   ← M2: the Loop Spec                 ★ Deliverable 2
-├── 03-orchestration/
-│   └── orchestration-map.md           ← M3: your fleet + the validator     ★ Deliverable 3
-├── 04-memory-context/
-│   └── memory-and-context.md          ← M4: retrieve-vs-long-context + your PM brain
-├── 05-bounds-evals/
-│   └── bounds-and-evals.md            ← M5: hard bounds + trajectory evals
-└── 06-autonomy/
-    ├── prototype.md                   ← demo + screenshots                ★ Deliverable 1
-    ├── build-insights.md              ← friction · learning · aha         ★ Deliverable 4
-    └── production-and-autonomy.md     ← dial · Trust Ladder · governance  ★ Deliverable 5
-```
+_Certification submission, Agentic Loops for PMs Certification._
