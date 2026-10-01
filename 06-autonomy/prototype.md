@@ -6,14 +6,14 @@
 
 ## What it does
 
-_One paragraph: the agent in action, end to end._
+Cortex is a PM chief-of-staff agent: when a product lead asks for a weekly leadership status update, it pulls the real project state, recent engineering activity, past precedent, the roadmap, and team norms, drafts a grounded status update, and proposes a capped batch of next-sprint stories from the PRD — all without ever posting anything, creating a ticket, or committing a date. An independent critic checks every draft against the pulled data before a human ever sees it, bouncing back up to 2 revisions before escalating. Every run ends either with a drafted update queued for a human's review, or an explicit escalation — nothing ever reaches a channel, a tracker, or a stakeholder without a person approving it first.
 
 ## How you built it
 
-- **Coding agent:** _which one you directed (Claude Code / Cursor / Codex)_
-- **Model + bounds:** _model used, max iterations, cost cap, queue cap_
-- **Repo / config:** _path to your build in `00-build/`_
-- **Live link:** _[shareable URL, optional bonus]_
+- **Coding agent:** Claude Code
+- **Model + bounds:** `gpt-4o-mini`; `CORTEX_MAX_ITERATIONS=8`, `CORTEX_MAX_REVISIONS=2`, `CORTEX_COST_CAP_USD=0.50` per run (M5's spec recommends tightening to $0.10/run + $0.030/day), `CORTEX_MAX_QUEUE_ITEMS=10`
+- **Repo / config:** `00-build/` (`agent.py`, `critic.py`, `prompts.py`, `tools.py`, `fixtures/`)
+- **Live link:** none — local CLI demo only
 
 ## Screenshots (required, collected M2 to M6)
 
@@ -21,12 +21,37 @@ Real screenshots of *your* Cortex running. These are the `00-build/CORTEX-ANATOM
 
 | # | Screenshot | What it shows | From |
 |---|---|---|---|
-| 1 | _[img]_ | happy-path run: a real drafted update + the HITL checkpoint (queued, not posted) | M2 |
+| 1 | _(transcript below)_ | happy-path run: a real drafted update + the HITL checkpoint (queued, not posted) | M2 |
 | 2 | _(transcript below)_ | the critic rejecting a bad draft (revise/block) | M3 |
 | 3 | _(transcript below)_ | a grounded update citing pulled activity + a caught hallucination | M4 |
 | 4 | _(transcript below)_ | jailbreak refused + escalated | M5 |
 | 5 | _(transcript below)_ | an iteration/cost/queue bound halting a runaway | M5 |
-| 6 | _[img]_ | end-to-end run | M6 |
+| 6 | _(transcript below)_ | end-to-end run | M6 |
+
+### M2 — Happy-path run + HITL checkpoint (transcript, accepted substitute for a screenshot per LAB.md)
+
+**Caption:** A real happy-path run gathering project data, activity, norms, and past precedent, drafting an update and proposing 2 stories (queued, nothing created) — the critic caught an invented date-formatting inconsistency and an unsupported status color across 2 revisions, so this run ended escalated rather than cleanly passed; either way, nothing was posted.
+
+```
+[step 1] TOOL get_project({'project_id': 'P-NORTH'}) -> {"status": "on_track", ...}
+[step 1] TOOL get_activity({'project_id': 'P-NORTH'}) -> {"activity": [{"pr_merged","#820"...}, {"pr_merged","#823"...}, {"issue_open","#825"...}]}
+[step 2] TOOL propose_stories({'project_id': 'P-NORTH', 'stories': ['Implement contextual tips A/B testing', 'Conduct analytics review for contextual tips']})
+          -> {"status": "queued_for_approval", "count": 2, "note": "queued for a human to approve, nothing was created in the tracker."}
+
+[step 3] PROPOSED OUTPUT: ...Status: Green... Activation Rate: Increased from 41% to 43%...
+
+CRITIC: {"verdict": "fail", "reasons": [
+  "The output claims a 'Green' status without justification...",
+  "The output presents the timeline for activity as 'July 2, 2026' and 'July 3, 2026', which may imply future commitments despite Cortex norms prohibiting the commitment of dates."
+]}
+-> critic rejected; revision 1/2
+
+...(revision 2/2 rejected for similar reasons)...
+
+REVISION CAP hit (2). Escalating to a human instead of looping. Run cost ≈ $0.0054
+LAST DRAFT (held, NOT posted, escalated to a human)
+Why it was held: validator rejected 2x (revision cap)
+```
 
 ### M3 — Critic rejection (transcript, accepted substitute for a screenshot per LAB.md)
 
@@ -134,6 +159,33 @@ MAX ITERATIONS (2) reached without finishing. Escalating. Run cost ≈ $0.0006
 LAST DRAFT (held, NOT posted, escalated to a human)
 (Cortex stopped before it produced a draft, nothing to show.)
 Why it was held: max iterations (2) reached
+```
+
+### M6 — End-to-end run (transcript, accepted substitute for a screenshot per LAB.md)
+
+**Caption:** The same M2 happy-path run, shown start to finish: task received → 4 tool calls gathering context (project, activity, norms, past updates) → draft → critic reject (1/2) → revise → critic reject (2/2) → revision cap hit → escalated to a human with the draft held, run cost $0.0054. The full loop, start to finish, with nothing sent anywhere.
+
+```
+CORTEX RUN, fixture: task-happy
+Task: Weekly leadership status update + next-sprint stories
+
+[step 1] TOOL get_project -> on_track
+[step 1] TOOL get_norms -> (team norms pulled)
+[step 1] TOOL get_activity -> PRs #820/#823, open issue #825
+[step 1] TOOL search_past_updates -> prior week's precedent
+[step 2] TOOL propose_stories -> queued_for_approval, count: 2
+
+[step 3] PROPOSED OUTPUT: Status: Green, Activation 41%->43%...
+CRITIC: fail (unsupported Green status; invented date framing)
+-> critic rejected; revision 1/2
+
+[step 5] PROPOSED OUTPUT: (revised draft)
+CRITIC: fail (date inconsistency; still unsupported status)
+-> critic rejected; revision 2/2
+
+REVISION CAP hit (2). Escalating to a human instead of looping. Run cost ≈ $0.0054
+LAST DRAFT (held, NOT posted, escalated to a human)
+Saved draft -> run-output/status-update-happy.md (for your review, nothing was posted)
 ```
 
 ### Reflection

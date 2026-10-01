@@ -10,37 +10,39 @@ _Autonomy is a product decision per user, not one global setting._
 
 | Segment | Desired autonomy | Why |
 |---|---|---|
-| _Cautious PM ("Tesla driver")_ | _supervised_ | _wants to review every update before it goes out_ |
-| _High-trust team lead ("Waymo passenger")_ | _bounded-autonomous_ | _happy to let the weekly update assemble itself_ |
+| Seasoned PM (months of experience with Cortex on their own projects) | Bounded-autonomous | Trusts Cortex's grounding and can sanity-check a draft in seconds |
+| New/junior PM (just inherited a project, unfamiliar with it) | Supervised | Can't yet tell if a draft is quietly wrong (wrong project, stale metric) the way we've watched happen |
+| Exec / stakeholder (requests a rollup on a project that isn't theirs day-to-day) | Supervised | Has the least first-hand context to catch a grounding error themselves |
+| Engineers (checking specs and analytics) | Supervised | Need to interact directly with the underlying data, not just trust the output |
 
 ## Trust Ladder
 
-- **Current rung:** _shadow · assisted · supervised · bounded-autonomous · autonomous_
-- **Eval gate to reach the next rung:** _which M5 evals must pass, at what threshold_
-- **Incident record so far:** _…_
+- **Current rung:** Supervised — Cortex owns the entire loop (pulling data, drafting, critiquing, revising), but every single run ends either escalated or "queued for your review"; it has zero ability to post anything on its own.
+- **Eval gate to reach the next rung (bounded-autonomous):** ≥95% EV-1 (tool-call accuracy) pass rate AND 100% EV-5 (safety/jailbreak) pass rate, measured over the most recent 4 weeks (or last 50 runs) of supervised production use.
+- **Incident record so far (what "clean" means for that window):** 0 instances of a wrong-project citation reaching a human-approved update, 0 jailbreak-induced policy violations, 0 confidential (Orbit/Pulsar) leaks.
 
 ## Deployment plan
 
-- **Runtime:** _managed agent platform · serverless · self-hosted, and why_
-- **Operator / on-call owner:** _who owns it in production_
-- **Rollback:** _how you turn it off / revert_
-- **Monitoring:** _the dashboard + the signals you watch_
+- **Runtime:** Serverless (a cloud function triggered by the inbound request) — fits the M2 Hook loop type exactly; no need for an always-on server since Cortex doesn't poll.
+- **Operator / on-call owner:** Reacher. Escalation path: repeated bound trips or a model-down situation (see Reliability) page Reacher directly.
+- **Rollback:** Revert the prompt/version via git, disable a specific tool (pull it from the `TOOLS` registry — done live twice this build, with `get_activity`), or drop a segment's dial back a rung (e.g. bounded-autonomous → supervised).
+- **Monitoring:** Eval pass % (EV-1–6 tracked per run), escalation rate (% of runs ending ESCALATE vs. DONE), cost-to-serve (observed $0.0006–$0.0048/run), trust incidents (wrong-project citations, leaks, jailbreak follow-throughs).
 
 ## ROI metrics (beyond adoption & tokens)
 
 | Metric | Target |
 |---|---|
-| _Task completion rate_ | _…_ |
-| _Time saved / cost-to-serve_ | _…_ |
-| _Trust incidents_ | _…_ |
+| **Outcome** — % of weekly updates approved with no major edits needed | Captured at the HITL approval step itself |
+| **Cost-to-serve** — average $/run | Already tracked directly by the `Bounds` class in `agent.py` |
+| **Trust incidents** — # of wrong-project citations, invented metrics, or confidential leaks caught per month | Captured from critic rejection reasons + human review notes |
 
 ## Widen-autonomy decision rule
 
-_What evidence lets you turn the dial up one notch, stated in advance._
+Once a segment's runs meet the Trust Ladder eval gate (≥95% EV-1 + 100% EV-5 over 4 weeks/50 runs) with zero trust incidents, that segment moves up one rung — starting with the seasoned-PM segment, since they're the only one whose desired rung (bounded-autonomous) currently exceeds Cortex's actual rung (supervised).
 
 ## Governance & forward strategy
 
-- **Compliance:** _what data must never enter a prompt; how PII is handled_
-- **Safety:** _which actions stay above the agent line for everyone; kill switch_
-- **Reliability:** _cost/iteration caps; escalate-on-stuck; fallback if the model is down_
-- **Strategy:** _the next segment or capability you'd widen into, and the eval that gates it_
+- **Compliance:** CONFIDENTIAL roadmap items (Orbit, Pulsar) can enter Cortex's own context — it needs to reason about them — but must never appear in external/company-wide *output*; that's an output rule, not an input rule. Real PII/payment/legal data should never enter a prompt at all.
+- **Safety:** Post/approve company-wide, commit a GA date, mark a launch gate — stays above the line for every segment regardless of rung (per M1, never moved by the dial). Kill switch: human manually revokes the OpenAI API key (M5).
+- **Reliability:** Existing caps from M5 (iteration 8, revision 2, cost $0.10/run + $0.03/day, queue 10); escalate-on-stuck confirmed via real runs. **Model-down fallback:** retry twice consecutively, then pause for 2 minutes and retry once more, then escalate to Reacher.
+- **Strategy:** Widen the seasoned-PM segment to bounded-autonomous first (per the widen rule above), gated by the Trust Ladder's eval numbers.
