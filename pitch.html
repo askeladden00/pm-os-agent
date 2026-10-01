@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cortex, Pitch</title>
+<style>
+
+
+
+:root{--bg:#07162C;--fg:#ffffff;--muted:#ffffff;--accent:#60a5fa;--accent2:#79c0ff;--line:rgba(255,255,255,0.08);--card:rgba(255,255,255,0.035)}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:'Saans',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh;overflow-x:hidden;position:relative}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(96,165,250,0.10) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 90% 90%,rgba(124,140,255,0.08) 0%,transparent 60%);pointer-events:none;z-index:0}
+main{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:80px 40px 0}
+h1,h2,h3{font-family:'Saans',sans-serif;letter-spacing:-0.01em;margin:0}
+a{color:var(--accent);text-decoration:none}
+code{font-family:'Antarctican Mono',monospace}
+.hero{text-align:center;margin-bottom:100px}
+.hero .badge{display:inline-block;font-family:'Saans',sans-serif;font-size:10.5px;font-weight:900;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent2);background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.30);border-radius:999px;padding:6px 14px;margin-bottom:26px}
+.hero h1{font-size:clamp(42px,7vw,80px);font-weight:900;line-height:1.02;margin:0 0 22px;background:linear-gradient(135deg,#ffffff 0%,#79c0ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{font-size:clamp(18px,2.2vw,26px);color:#ffffff;max-width:760px;margin:0 auto 30px;line-height:1.5}
+.hero .meta{font-family:'Saans',sans-serif;font-size:13.5px;color:var(--muted);letter-spacing:0.06em;margin:0 0 30px}
+.hero .ctas{display:inline-flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.hero .cta{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:13px 28px;border-radius:999px;font-family:'Saans',sans-serif;font-weight:800;font-size:14px;box-shadow:0 10px 30px rgba(96,165,250,0.30);transition:transform 0.15s,box-shadow 0.15s}
+.hero .cta:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(96,165,250,0.40)}
+.hero .cta.secondary{background:transparent;border:1px solid var(--line);color:var(--fg);box-shadow:none}
+section.block{margin-bottom:100px}
+.eyebrow{font-family:'Saans',sans-serif;font-size:11px;font-weight:900;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent2);margin-bottom:10px}
+.block h2{font-size:clamp(30px,4vw,46px);font-weight:800;margin:0 0 12px;color:#fff}
+.block .lede{font-size:16px;color:var(--muted);margin:0 0 36px;max-width:680px;line-height:1.55}
+.modules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+.m-card{background:var(--card);border:1px solid color-mix(in srgb,var(--col) 40%,transparent);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.m-card .m-head{padding:18px 22px;background:linear-gradient(135deg,color-mix(in srgb,var(--col) 18%,transparent) 0%,transparent 70%);border-bottom:1px solid color-mix(in srgb,var(--col) 25%,transparent)}
+.m-card .m-num{font-family:'Saans',sans-serif;font-size:26px;font-weight:900;line-height:1;color:var(--col);margin-bottom:5px}
+.m-card .m-num .m-emoji{font-size:22px;margin-left:4px}
+.m-card .m-name{font-family:'Saans',sans-serif;font-size:17px;font-weight:800;color:#fff}
+.m-card .m-body{padding:14px 22px 18px}
+.m-card .m-link{display:flex;align-items:center;gap:8px;font-size:13px;color:#ffffff;margin:8px 0;text-decoration:none}
+.m-card .m-link code{font-size:11.5px;background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:6px;color:#ffffff}
+.m-card .m-link:hover code{background:rgba(255,255,255,0.10);color:#fff}
+.m-card .m-link.missing{opacity:0.42;font-style:italic}
+.m-card .m-arrow{color:var(--col);font-weight:800}
+.exec-rail{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.exec-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px}
+.exec-card .exec-step{display:inline-block;font-family:'Saans',sans-serif;font-size:10.5px;font-weight:900;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent2);margin-bottom:10px}
+.exec-card h3{font-size:15px;font-weight:800;color:#fff;margin:0 0 12px}
+.exec-card .exec-body{font-size:12.5px;color:#ffffff;line-height:1.6}
+.exec-card .exec-body em{color:var(--muted)}
+.exec-card .exec-body ul{margin:0;padding-left:16px}
+.exec-card .exec-body li{margin-bottom:8px}
+.exec-card .exec-body .widen-rule{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.exec-table{width:100%;border-collapse:collapse;font-size:11.5px;margin-bottom:4px}
+.exec-table th,.exec-table td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+.exec-table th{color:var(--accent2);font-weight:700;font-family:'Saans',sans-serif;font-size:10.5px;text-transform:uppercase;letter-spacing:0.04em}
+.insights-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.insight{background:var(--card);border:1px solid;border-radius:14px;padding:24px 26px}
+.insight .ic-label{font-family:'Saans',sans-serif;font-size:10.5px;font-weight:900;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:12px}
+.insight h3{font-size:17px;font-weight:800;margin:0;color:#fff;line-height:1.45}
+.insight h3 ul{margin:0;padding-left:16px;font-size:15px;font-weight:600}
+.insight h3 li{margin-bottom:8px}
+.loom-wrap{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px;text-align:center;margin-bottom:60px}
+.loom-wrap a{display:inline-flex;align-items:center;gap:10px;background:rgba(124,140,255,0.10);border:1px solid rgba(124,140,255,0.30);color:#bcb1ff;padding:13px 26px;border-radius:999px;font-family:'Saans',sans-serif;font-weight:800;font-size:14px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:40px 20px;border-top:1px solid var(--line);margin-top:60px;letter-spacing:0.04em}
+@media(max-width:800px){.insights-row{grid-template-columns:1fr}main{padding:60px 24px 0}}
+</style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <span class="badge">Agentic Loops for PMs Certification</span>
+    <h1>Cortex</h1>
+    <p class="lead">Cortex drafts your weekly status update and next-sprint stories &mdash; grounded in real data, checked by an independent critic, and never sent without your sign-off.</p>
+    <p class="meta">Bryan Le • Agentic Loops for PMs • Cohort September 2026</p>
+    <div class="ctas"><a class="cta" href="https://github.com/askeladden00/pm-os-agent" target="_blank" rel="noopener">View the repo &rarr;</a></div>
+  </section>
+  <section class="block">
+    <div class="eyebrow">Module artifacts</div>
+    <h2>The 6 building blocks</h2>
+    <p class="lede">Six modules. Six artifacts. One coherent body of work that turns Cortex from a line on a page into a bounded, shippable agent.</p>
+    <div class="modules-grid"><div class="m-card" style="--col:#3b82f6"><div class="m-head"><div class="m-num">M1 <span class="m-emoji">&#x1F4CF;</span></div><div class="m-name">The Agent Line</div></div><div class="m-body"><a class="m-link" href="https://github.com/askeladden00/pm-os-agent/blob/main/01-agent-line/agent-line-map.md" target="_blank" rel="noopener"><span class="m-arrow">&rarr;</span> Agent-line map: <code>01-agent-line/agent-line-map.md</code></a></div></div><div class="m-card" style="--col:#fbbf24"><div class="m-head"><div class="m-num">M2 <span class="m-emoji">&#x1F501;</span></div><div class="m-name">Loop Engineering</div></div><div class="m-body"><a class="m-link" href="https://github.com/askeladden00/pm-os-agent/blob/main/02-loop-design/loop-spec.md" target="_blank" rel="noopener"><span class="m-arrow">&rarr;</span> Loop spec: <code>02-loop-design/loop-spec.md</code></a></div></div><div class="m-card" style="--col:#bcb1ff"><div class="m-head"><div class="m-num">M3 <span class="m-emoji">&#x1F9E9;</span></div><div class="m-name">Orchestration &amp; Subagents</div></div><div class="m-body"><a class="m-link" href="https://github.com/askeladden00/pm-os-agent/blob/main/03-orchestration/orchestration-map.md" target="_blank" rel="noopener"><span class="m-arrow">&rarr;</span> Orchestration map: <code>03-orchestration/orchestration-map.md</code></a></div></div><div class="m-card" style="--col:#34d399"><div class="m-head"><div class="m-num">M4 <span class="m-emoji">&#x1F9E0;</span></div><div class="m-name">Context Engineering &amp; Memory</div></div><div class="m-body"><a class="m-link" href="https://github.com/askeladden00/pm-os-agent/blob/main/04-memory-context/memory-and-context.md" target="_blank" rel="noopener"><span class="m-arrow">&rarr;</span> Memory &amp; context: <code>04-memory-context/memory-and-context.md</code></a></div></div><div class="m-card" style="--col:#f472b6"><div class="m-head"><div class="m-num">M5 <span class="m-emoji">&#x1F6E1;&#xFE0F;</span></div><div class="m-name">Bounds &amp; Evals</div></div><div class="m-body"><a class="m-link" href="https://github.com/askeladden00/pm-os-agent/blob/main/05-bounds-evals/bounds-and-evals.md" target="_blank" rel="noopener"><span class="m-arrow">&rarr;</span> Bounds &amp; evals: <code>05-bounds-evals/bounds-and-evals.md</code></a></div></div><div class="m-card" style="--col:#79c0ff"><div class="m-head"><div class="m-num">M6 <span class="m-emoji">&#x1F39A;&#xFE0F;</span></div><div class="m-name">Autonomy &amp; Production</div></div><div class="m-body"><a class="m-link" href="https://github.com/askeladden00/pm-os-agent/blob/main/06-autonomy/production-and-autonomy.md" target="_blank" rel="noopener"><span class="m-arrow">&rarr;</span> Production &amp; autonomy: <code>06-autonomy/production-and-autonomy.md</code></a><a class="m-link" href="https://github.com/askeladden00/pm-os-agent/blob/main/06-autonomy/prototype.md" target="_blank" rel="noopener"><span class="m-arrow">&rarr;</span> Prototype: <code>06-autonomy/prototype.md</code></a></div></div></div>
+  </section>
+  <section class="block">
+    <div class="eyebrow">Ship plan</div>
+    <h2>How I'd ship Cortex</h2>
+    <p class="lede">The autonomy dial per segment, where it sits on the trust ladder, how it deploys, what it returns, and how I keep it safe.</p>
+    <div class="exec-rail">
+      <div class="exec-card">
+        <div class="exec-step">01 &middot; Dial</div>
+        <h3>Autonomy per segment</h3>
+        <div class="exec-body">
+          <table class="exec-table">
+            <tr><th>Segment</th><th>Autonomy</th><th>Why</th></tr>
+            <tr><td>Seasoned PM</td><td>Bounded-autonomous</td><td>Trusts Cortex's grounding, can sanity-check a draft in seconds</td></tr>
+            <tr><td>New/junior PM</td><td>Supervised</td><td>Can't yet tell if a draft is quietly wrong</td></tr>
+            <tr><td>Exec / stakeholder</td><td>Supervised</td><td>Least first-hand context to catch a grounding error</td></tr>
+            <tr><td>Engineers</td><td>Supervised</td><td>Need to interact directly with the underlying data</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="exec-card">
+        <div class="exec-step">02 &middot; Ladder</div>
+        <h3>Rung + eval gate</h3>
+        <div class="exec-body">
+          <ul>
+            <li><strong>Current rung:</strong> Supervised &mdash; Cortex owns the entire loop (pulling data, drafting, critiquing, revising), but every run ends either escalated or &ldquo;queued for your review&rdquo;; zero ability to post anything on its own.</li>
+            <li><strong>Eval gate to bounded-autonomous:</strong> &ge;95% EV-1 (tool-call accuracy) pass rate AND 100% EV-5 (safety/jailbreak) pass rate, over the most recent 4 weeks (or last 50 runs) of supervised use.</li>
+            <li><strong>Clean incident record:</strong> 0 wrong-project citations reaching a human-approved update, 0 jailbreak-induced policy violations, 0 confidential (Orbit/Pulsar) leaks.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="exec-card">
+        <div class="exec-step">03 &middot; Deploy</div>
+        <h3>Where it runs &amp; who owns it</h3>
+        <div class="exec-body">
+          <ul>
+            <li><strong>Runtime:</strong> Serverless (triggered by the inbound request) &mdash; fits the M2 Hook loop type; no always-on server needed.</li>
+            <li><strong>Operator / on-call:</strong> Reacher. Escalation path: repeated bound trips or a model-down situation page Reacher directly.</li>
+            <li><strong>Rollback:</strong> Revert the prompt/version via git, disable a specific tool (pull it from the <code>TOOLS</code> registry), or drop a segment's dial back a rung.</li>
+            <li><strong>Monitoring:</strong> Eval pass % (EV-1&ndash;6), escalation rate, cost-to-serve ($0.0006&ndash;$0.0048/run observed), trust incidents.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="exec-card">
+        <div class="exec-step">04 &middot; ROI</div>
+        <h3>Value, not activity</h3>
+        <div class="exec-body">
+          <table class="exec-table">
+            <tr><th>Metric</th><th>Target</th></tr>
+            <tr><td>Outcome</td><td>% of weekly updates approved with no major edits needed</td></tr>
+            <tr><td>Cost-to-serve</td><td>Average $/run, tracked by the <code>Bounds</code> class</td></tr>
+            <tr><td>Trust incidents</td><td># of wrong-project citations, invented metrics, or leaks caught per month</td></tr>
+          </table>
+          <div class="widen-rule"><strong>Widen-autonomy rule:</strong> once a segment's runs meet the eval gate above with zero trust incidents, it moves up one rung &mdash; starting with the seasoned-PM segment.</div>
+        </div>
+      </div>
+      <div class="exec-card">
+        <div class="exec-step">05 &middot; Governance</div>
+        <h3>How I keep it safe</h3>
+        <div class="exec-body">
+          <ul>
+            <li><strong>Compliance:</strong> CONFIDENTIAL roadmap items (Orbit, Pulsar) can enter Cortex's own context but must never appear in external/company-wide output &mdash; an output rule, not an input rule. Real PII/payment/legal data never enters a prompt at all.</li>
+            <li><strong>Safety:</strong> Post/approve company-wide, commit a GA date, mark a launch gate &mdash; stays above the line for every segment regardless of rung. Kill switch: human manually revokes the OpenAI API key.</li>
+            <li><strong>Reliability:</strong> Caps from M5 (iteration 8, revision 2, cost $0.10/run + $0.03/day, queue 10). Model-down fallback: retry twice, pause 2 minutes, retry once more, then escalate to Reacher.</li>
+            <li><strong>Strategy:</strong> Widen the seasoned-PM segment to bounded-autonomous first, gated by the Trust Ladder's eval numbers.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="block">
+    <div class="eyebrow">Build insights</div>
+    <h2>What I learned</h2>
+    <p class="lede">The honest four: where it hurt, what clicked, and what I'd change.</p>
+    <div class="insights-row">
+      <div class="insight" style="border-color:rgba(248,113,113,0.40)"><div class="ic-label" style="color:#f87171">&#x1F635; Friction</div><h3>The validator (critic) was the toughest part of the build &mdash; tuning its checks, revision cap, and watching it reject drafts for subtle reasons (an invented risk-level, a conflated project, a stale metric) across nearly every real run took more iteration than any other piece.</h3></div>
+      <div class="insight" style="border-color:rgba(96,165,250,0.40)"><div class="ic-label" style="color:#60a5fa">&#x1F9E0; Learning</div><h3><ul><li>The agent can be dialed to fit different personas (the Autonomy Dial per segment), not one global trust setting.</li><li>The agent can be fine-tuned to meet specific project objectives rather than running on generic defaults.</li></ul></h3></div>
+      <div class="insight" style="border-color:rgba(251,191,36,0.40)"><div class="ic-label" style="color:#fbbf24">&#x1F4A1; Aha</div><h3>Having multiple agents each do one specific task, instead of one main agent trying to do everything, would likely be more robust than the single-drafter-plus-critic design Cortex ended up with.</h3></div>
+      <div class="insight" style="border-color:rgba(188,177,255,0.40)"><div class="ic-label" style="color:#bcb1ff">&#x1F504; What I'd change</div><h3>Start with who Cortex is for and what problem is actually being solved for them (the user segments and their needs) before building out the mechanics &mdash; that would have saved real cycle time spent fine-tuning its behavior later.</h3></div>
+    </div>
+  </section>
+
+  <footer>Bryan Le • Agentic Loops for PMs • Cohort September 2026 &middot; Certification submission</footer>
+</main>
+</body>
+</html>
